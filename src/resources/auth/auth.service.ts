@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { comparePassword } from 'src/utils/funcs/password';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,8 +11,8 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async validateUser(name: string, pass: string): Promise<any> {
-        const user = await this.usersService.findOne(name);
+    async validateUser(phone: string, pass: string): Promise<any> {
+        const user = await this.usersService.findOneByPhone(phone);
         if (user) {
             const isPasswordValid = await comparePassword(pass, user.password);
             if (isPasswordValid) {
@@ -20,5 +21,14 @@ export class AuthService {
             }
         }
         return null;
+    }
+
+    async register(registerDto: RegisterDto) {
+        const existingUser = await this.usersService.findOneByPhone(registerDto.phone);
+        if (existingUser) {
+            throw new BadRequestException('User already exists with this phone number');
+        }
+        const user = await this.usersService.create(registerDto);
+        return user;
     }
 }
