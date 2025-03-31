@@ -3,7 +3,9 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LocalAuthGuard } from 'src/utils/guards/local-auth.guard';
 import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
-
+import { RoleGuard } from 'src/utils/guards/role.guard';
+import { Roles } from 'src/utils/decorators/role.decorator';
+import { Role } from 'src/utils/enums/role.enum';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
