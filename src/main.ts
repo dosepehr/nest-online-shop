@@ -4,11 +4,13 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 import { swaggerConfig } from 'config/swagger.config';
+import { QueryExceptionFilter } from 'utils/filters/query-exception.filter';
 
 async function bootstrap() {
   // app global pipes
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new QueryExceptionFilter());
 
   // swagger config
   const documentFactory = () =>
