@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { generateHash } from 'utils/funcs/password';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,5 +17,8 @@ export class AuthService {
       ...registerDto,
       password: await generateHash(registerDto.password),
     });
+  }
+  async login(loginDto: LoginDto) {
+    return this.usersService.login(loginDto);
   }
 }
