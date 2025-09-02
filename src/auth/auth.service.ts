@@ -64,17 +64,7 @@ export class AuthService {
   }
 
   async getMe(req): Promise<SuccessResponse<GetMeResponse>> {
-    const user = await this.userRepository.findOne({
-      where: { id: req.user.id },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException()
-    }
-    const safeUser = {
-      ...user,
-      password: undefined,
-    };
+    const { password, ...safeUser } = req.user;
     return {
       status: true,
       data: safeUser,
