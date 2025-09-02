@@ -1,5 +1,6 @@
 import {
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
@@ -11,6 +12,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { TokenInterface } from 'utils/interfaces/token.interface';
+import { GetMeResponse } from 'utils/interfaces/get-me-response.interface';
 
 @Injectable()
 export class AuthService {
@@ -58,6 +60,24 @@ export class AuthService {
       data: {
         token: access_token,
       },
+    };
+  }
+
+  async getMe(req): Promise<SuccessResponse<GetMeResponse>> {
+    const user = await this.userRepository.findOne({
+      where: { id: req.user.id },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException()
+    }
+    const safeUser = {
+      ...user,
+      password: undefined,
+    };
+    return {
+      status: true,
+      data: safeUser,
     };
   }
 }

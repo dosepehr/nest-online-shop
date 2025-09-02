@@ -1,8 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
 
 @Catch(QueryFailedError)
@@ -14,7 +10,7 @@ export class QueryExceptionFilter implements ExceptionFilter {
     if (exception.code === 'ER_DUP_ENTRY') {
       return response.status(409).json({
         status: false,
-        message: 'Duplicate entry: this mobile number is already in use',
+        message: 'Duplicate entry',
       });
     }
 
