@@ -20,7 +20,7 @@ import { User } from 'src/users/entities/user.entity';
 import { CurrentUser } from 'utils/decorators/current-user.decorator';
 
 @UseGuards(AuthGuard)
-@Controller('address')
+@Controller('addresses')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 

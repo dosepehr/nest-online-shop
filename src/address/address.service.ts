@@ -2,11 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { User } from 'src/users/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Address } from './entities/address.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AddressService {
-  create(req: User, createAddressDto: CreateAddressDto) {
-    return 'This action adds a new address';
+  constructor(
+    @InjectRepository(Address)
+    private readonly addressRepository: Repository<Address>,
+  ) {}
+
+  async create(user: User, createAddressDto: CreateAddressDto) {
+    const address = this.addressRepository.create({
+      ...createAddressDto,
+      user,
+    });
+    return this.addressRepository.save(address);
   }
 
   findAll() {

@@ -4,9 +4,10 @@ import { AddressController } from './address.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Address } from './entities/address.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Address]),
     JwtModule.register({
       secret: 'yourSecretKey',
       signOptions: { expiresIn: '1d' },
