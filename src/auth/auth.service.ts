@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { TokenInterface } from 'utils/interfaces/token.interface';
 import { GetMeResponse } from 'utils/interfaces/get-me-response.interface';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -63,8 +64,8 @@ export class AuthService {
     };
   }
 
-  async getMe(req): Promise<SuccessResponse<GetMeResponse>> {
-    const { password, ...safeUser } = req.user;
+  async getMe(req: Request): Promise<SuccessResponse<GetMeResponse>> {
+    const { password, ...safeUser } = req.user!;
     return {
       status: true,
       data: safeUser,

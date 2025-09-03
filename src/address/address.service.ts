@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
+import { Request } from 'express';
 
 @Injectable()
 export class AddressService {
-  create(createAddressDto: CreateAddressDto) {
+  create(req: Request, createAddressDto: CreateAddressDto) {
     return 'This action adds a new address';
   }
 

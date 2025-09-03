@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
+import type { Request } from 'express'; // <-- use Express Request
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
@@ -22,12 +24,14 @@ export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Post()
-  create(@Body() createAddressDto: CreateAddressDto) {
-    return this.addressService.create(createAddressDto);
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  create(@Req() req: Request, @Body() createAddressDto: CreateAddressDto) {
+    return this.addressService.create(req, createAddressDto);
   }
 
   @Get()
-  @Roles(UserRole.USER, UserRole.ADMIN)
+  @Roles(UserRole.ADMIN)
   @UseGuards(RolesGuard)
   findAll() {
     return this.addressService.findAll();
