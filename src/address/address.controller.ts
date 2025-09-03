@@ -42,8 +42,10 @@ export class AddressController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.addressService.findOne(+id);
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  findOne(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.addressService.findOne(+id, user);
   }
 
   @Patch(':id')

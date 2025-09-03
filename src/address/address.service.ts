@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { User } from 'src/users/entities/user.entity';
@@ -41,7 +41,7 @@ export class AddressService {
         data: addresses,
       };
     }
-    
+
     // Regular users can only see their own addresses
     const addresses = await this.addressRepository.find({
       where: { user: { id: user.id } },
@@ -54,8 +54,20 @@ export class AddressService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} address`;
+  async findOne(id: number, user: User): Promise<SuccessResponse<Address>> {
+    const address = await this.addressRepository.findOne({
+      where: {
+        user: { id: user.id },
+        id,
+      },
+    });
+    if (!address) {
+      throw new NotFoundException();
+    }
+    return {
+      status: true,
+      data: address,
+    };
   }
 
   update(id: number, updateAddressDto: UpdateAddressDto) {
