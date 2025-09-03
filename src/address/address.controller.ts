@@ -12,6 +12,9 @@ import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { AuthGuard } from 'utils/guards/auth.guard';
+import { Roles } from 'utils/decorators/roles.decorator';
+import { UserRole } from 'utils/enums/user-role.enum';
+import { RolesGuard } from 'utils/guards/roles.guard';
 
 @UseGuards(AuthGuard)
 @Controller('address')
@@ -24,6 +27,8 @@ export class AddressController {
   }
 
   @Get()
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   findAll() {
     return this.addressService.findAll();
   }
