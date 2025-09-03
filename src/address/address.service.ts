@@ -5,6 +5,8 @@ import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Address } from './entities/address.entity';
 import { Repository } from 'typeorm';
+import { SuccessResponse } from 'utils/interfaces/api-responses.interface';
+import { UserRole } from 'utils/enums/user-role.enum';
 
 @Injectable()
 export class AddressService {
@@ -13,16 +15,43 @@ export class AddressService {
     private readonly addressRepository: Repository<Address>,
   ) {}
 
-  async create(user: User, createAddressDto: CreateAddressDto) {
+  async create(
+    user: User,
+    createAddressDto: CreateAddressDto,
+  ): Promise<SuccessResponse> {
     const address = this.addressRepository.create({
       ...createAddressDto,
       user,
     });
-    return this.addressRepository.save(address);
+    await this.addressRepository.save(address);
+    return {
+      status: true,
+      message: 'Address is created',
+    };
   }
 
-  findAll() {
-    return `This action returns all address`;
+  async findAll(user: User): Promise<SuccessResponse<Address[]>> {
+    if (user.role === UserRole.ADMIN) {
+      // Admin can see all addresses
+      const addresses = await this.addressRepository.find({
+        relations: ['user'],
+      });
+      return {
+        status: true,
+        data: addresses,
+      };
+    }
+    
+    // Regular users can only see their own addresses
+    const addresses = await this.addressRepository.find({
+      where: { user: { id: user.id } },
+      relations: ['user'],
+    });
+
+    return {
+      status: true,
+      data: addresses,
+    };
   }
 
   findOne(id: number) {

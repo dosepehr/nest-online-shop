@@ -35,10 +35,10 @@ export class AddressController {
   }
 
   @Get()
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   @UseGuards(RolesGuard)
-  findAll() {
-    return this.addressService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.addressService.findAll(user);
   }
 
   @Get(':id')
