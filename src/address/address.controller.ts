@@ -18,6 +18,9 @@ import { Roles } from 'utils/decorators/roles.decorator';
 import { UserRole } from 'utils/enums/user-role.enum';
 import { RolesGuard } from 'utils/guards/roles.guard';
 
+import { User } from 'src/users/entities/user.entity';
+import { CurrentUser } from 'utils/decorators/current-user.decorator';
+
 @UseGuards(AuthGuard)
 @Controller('address')
 export class AddressController {
@@ -26,8 +29,11 @@ export class AddressController {
   @Post()
   @Roles(UserRole.USER, UserRole.ADMIN)
   @UseGuards(RolesGuard)
-  create(@Req() req: Request, @Body() createAddressDto: CreateAddressDto) {
-    return this.addressService.create(req, createAddressDto);
+  create(
+    @CurrentUser() user: User,
+    @Body() createAddressDto: CreateAddressDto,
+  ) {
+    return this.addressService.create(user, createAddressDto);
   }
 
   @Get()
