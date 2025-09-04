@@ -31,18 +31,6 @@ export class AddressService {
   }
 
   async findAll(user: User): Promise<SuccessResponse<Address[]>> {
-    if (user.role === UserRole.ADMIN) {
-      // Admin can see all addresses
-      const addresses = await this.addressRepository.find({
-        relations: ['user'],
-      });
-      return {
-        status: true,
-        data: addresses,
-      };
-    }
-
-    // Regular users can only see their own addresses
     const addresses = await this.addressRepository.find({
       where: { user: { id: user.id } },
       relations: ['user'],
@@ -79,11 +67,59 @@ export class AddressService {
     };
   }
 
-  update(id: number, updateAddressDto: UpdateAddressDto) {
-    return `This action updates a #${id} address`;
+  async update(
+    id: number,
+    user: User,
+    updateAddressDto: UpdateAddressDto,
+  ): Promise<SuccessResponse> {
+    const address = await this.addressRepository.findOne({
+      where: { id, user: { id: user.id } },
+    });
+
+    if (!address) {
+      throw new NotFoundException();
+    }
+
+    Object.assign(address, updateAddressDto);
+    await this.addressRepository.save(address);
+
+    return {
+      status: true,
+      message: 'Address updated successfully',
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} address`;
+  async remove(id: number, user: User): Promise<SuccessResponse> {
+    const address = await this.addressRepository.findOne({
+      where: { id, user: { id: user.id } },
+    });
+
+    if (!address) {
+      throw new NotFoundException('Address not found');
+    }
+
+    await this.addressRepository.remove(address);
+
+    return {
+      status: true,
+      message: 'Address deleted successfully',
+    };
+  }
+
+  async removeByAdmin(id: number): Promise<SuccessResponse> {
+    const address = await this.addressRepository.findOne({
+      where: { id },
+    });
+
+    if (!address) {
+      throw new NotFoundException('Address not found');
+    }
+
+    await this.addressRepository.remove(address);
+
+    return {
+      status: true,
+      message: 'Address deleted successfully',
+    };
   }
 }

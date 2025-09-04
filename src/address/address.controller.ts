@@ -55,12 +55,27 @@ export class AddressController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
-    return this.addressService.update(+id, updateAddressDto);
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  update(
+    @Param('id') id: string,
+    @CurrentUser() user: User,
+    @Body() updateAddressDto: UpdateAddressDto,
+  ) {
+    return this.addressService.update(+id, user, updateAddressDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.addressService.remove(+id);
+  @Roles(UserRole.USER, UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  remove(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.addressService.remove(+id, user);
+  }
+
+  @Delete('/admin/:id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  removeByAdmin(@Param('id') id: string) {
+    return this.addressService.removeByAdmin(+id);
   }
 }
