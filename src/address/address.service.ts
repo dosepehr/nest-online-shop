@@ -53,6 +53,15 @@ export class AddressService {
       data: addresses,
     };
   }
+  async findAllForAdmin(): Promise<SuccessResponse<Address[]>> {
+    const addresses = await this.addressRepository.find({
+      relations: ['user'],
+    });
+    return {
+      status: true,
+      data: addresses,
+    };
+  }
 
   async findOne(id: number, user: User): Promise<SuccessResponse<Address>> {
     const address = await this.addressRepository.findOne({

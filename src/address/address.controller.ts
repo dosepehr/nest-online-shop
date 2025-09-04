@@ -40,6 +40,12 @@ export class AddressController {
   findAll(@CurrentUser() user: User) {
     return this.addressService.findAll(user);
   }
+  @Get('/all')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  findAllForAdmin() {
+    return this.addressService.findAllForAdmin();
+  }
 
   @Get(':id')
   @Roles(UserRole.USER, UserRole.ADMIN)
