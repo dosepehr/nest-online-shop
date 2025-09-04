@@ -7,6 +7,7 @@ import { dbConfig } from 'config/db.config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AddressModule } from './address/address.module';
+import { TicketModule } from './ticket/ticket.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AddressModule } from './address/address.module';
     UsersModule,
     AuthModule,
     AddressModule,
+    TicketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
