@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { TicketType } from 'utils/enums/ticket-type.enum';
@@ -31,13 +30,14 @@ export class Ticket {
   })
   status: TicketType;
 
-  //   @ManyToOne(() => User, (user) => user.tickets)
-  //   user: User;
-  @Column()
+  @ManyToOne(() => User, (user) => user.tickets)
+  user: User;
+
+  @Column({ type: 'datetime', nullable: true })
   lastAnswerAt: Date;
 
-  @Column({ default: null })
-  closedAt: Date | null;
+  @Column({ type: 'datetime', nullable: true })
+  closedAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,4 +1,5 @@
 import { Address } from 'src/address/entities/address.entity';
+import { Ticket } from 'src/ticket/entities/ticket.entity';
 import {
   Column,
   CreateDateColumn,
@@ -32,6 +33,9 @@ export class User {
 
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
+
+  @OneToMany(() => Ticket, (ticket) => ticket.user)
+  tickets: Ticket[];
 
   @CreateDateColumn()
   createdAt: Date;
