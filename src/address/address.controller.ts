@@ -12,70 +12,41 @@ import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { AuthGuard } from 'utils/guards/auth.guard';
-import { Roles } from 'utils/decorators/roles.decorator';
-import { UserRole } from 'utils/enums/user-role.enum';
 import { RolesGuard } from 'utils/guards/roles.guard';
-
 import { User } from 'src/users/entities/user.entity';
 import { CurrentUser } from 'utils/decorators/current-user.decorator';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('addresses')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Post()
-  @Roles(UserRole.USER, UserRole.ADMIN)
-  @UseGuards(RolesGuard)
-  create(
-    @CurrentUser() user: User,
-    @Body() createAddressDto: CreateAddressDto,
-  ) {
-    return this.addressService.create(user, createAddressDto);
+  create(@CurrentUser() user: User, @Body() dto: CreateAddressDto) {
+    return this.addressService.create(user, dto);
   }
 
   @Get()
-  @Roles(UserRole.USER, UserRole.ADMIN)
-  @UseGuards(RolesGuard)
   findAll(@CurrentUser() user: User) {
     return this.addressService.findAll(user);
   }
-  @Get('/all')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
-  findAllForAdmin() {
-    return this.addressService.findAllForAdmin();
-  }
 
   @Get(':id')
-  @Roles(UserRole.USER, UserRole.ADMIN)
-  @UseGuards(RolesGuard)
   findOne(@Param('id') id: string, @CurrentUser() user: User) {
     return this.addressService.findOne(+id, user);
   }
 
   @Patch(':id')
-  @Roles(UserRole.USER, UserRole.ADMIN)
-  @UseGuards(RolesGuard)
   update(
     @Param('id') id: string,
     @CurrentUser() user: User,
-    @Body() updateAddressDto: UpdateAddressDto,
+    @Body() dto: UpdateAddressDto,
   ) {
-    return this.addressService.update(+id, user, updateAddressDto);
+    return this.addressService.update(+id, user, dto);
   }
 
   @Delete(':id')
-  @Roles(UserRole.USER, UserRole.ADMIN)
-  @UseGuards(RolesGuard)
   remove(@Param('id') id: string, @CurrentUser() user: User) {
     return this.addressService.remove(+id, user);
-  }
-
-  @Delete('/admin/:id')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
-  removeByAdmin(@Param('id') id: string) {
-    return this.addressService.removeByAdmin(+id);
   }
 }

@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Address } from './entities/address.entity';
+import { AdminAddressController } from './admin-address.controller';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Address]),
@@ -13,7 +14,7 @@ import { Address } from './entities/address.entity';
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  controllers: [AddressController],
+  controllers: [AddressController, AdminAddressController],
   providers: [AddressService],
 })
 export class AddressModule {}
