@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { TicketType } from 'utils/enums/ticket-type.enum';
+import { TicketMessage } from 'src/ticket-message/entities/ticket-message.entity';
 
 @Entity('tickets')
 export class Ticket {
@@ -32,6 +34,9 @@ export class Ticket {
 
   @ManyToOne(() => User, (user) => user.tickets)
   user: User;
+
+  @OneToMany(() => TicketMessage, (ticketMessage) => ticketMessage.ticket)
+  messages: TicketMessage[];
 
   @Column({ type: 'datetime', nullable: true })
   lastAnswerAt: Date;
