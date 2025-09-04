@@ -1,0 +1,6 @@
+export enum TicketType {
+  NOT_ANSWERED = 'NOT_ANSWERED',
+  ANSWERED = 'ANSWERED',
+  CLOSED = 'CLOSED',
+  CHECKING = 'CHECKING',
+}
