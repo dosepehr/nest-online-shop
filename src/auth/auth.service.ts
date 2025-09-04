@@ -64,8 +64,8 @@ export class AuthService {
     };
   }
 
-  async getMe(req: Request): Promise<SuccessResponse<GetMeResponse>> {
-    const { password, ...safeUser } = req.user!;
+  async getMe(user: User): Promise<SuccessResponse<GetMeResponse>> {
+    const { password, ...safeUser } = user;
     return {
       status: true,
       data: safeUser,

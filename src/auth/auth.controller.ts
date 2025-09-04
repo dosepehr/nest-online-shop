@@ -4,6 +4,8 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from 'utils/guards/auth.guard';
 import type { Request } from 'express';
+import { User } from 'src/users/entities/user.entity';
+import { CurrentUser } from 'utils/decorators/current-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -19,7 +21,7 @@ export class AuthController {
   }
   @Get('/me')
   @UseGuards(AuthGuard)
-  getMe(@Req() req: Request) {
-    return this.authService.getMe(req);
+  getMe(@CurrentUser() user: User) {
+    return this.authService.getMe(user);
   }
 }
