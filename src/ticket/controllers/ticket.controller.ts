@@ -3,9 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   UseGuards,
 } from '@nestjs/common';
 import { TicketService } from '../ticket.service';
@@ -26,22 +24,12 @@ export class TicketController {
   }
 
   @Get()
-  findAll() {
-    return this.ticketService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.ticketService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketService.update(+id, updateTicketDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketService.remove(+id);
+  findOne(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.ticketService.findOne(+id, user);
   }
 }
