@@ -1,1 +1,15 @@
-export class CreateTicketDto {}
+import { IsString, IsNotEmpty } from 'class-validator';
+
+export class CreateTicketDto {
+  @IsNotEmpty()
+  @IsString()
+  title: string;
+
+  @IsNotEmpty()
+  @IsString()
+  subject: string;
+
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+}
