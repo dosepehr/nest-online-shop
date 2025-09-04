@@ -1,9 +1,10 @@
 import { Controller, Get, Param, Delete, UseGuards } from '@nestjs/common';
-import { AddressService } from './address.service';
+
 import { AuthGuard } from 'utils/guards/auth.guard';
 import { Roles } from 'utils/decorators/roles.decorator';
 import { UserRole } from 'utils/enums/user-role.enum';
 import { RolesGuard } from 'utils/guards/roles.guard';
+import { AddressService } from '../address.service';
 
 @UseGuards(AuthGuard, RolesGuard)
 @Controller('admin/addresses')

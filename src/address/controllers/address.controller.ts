@@ -8,13 +8,14 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { AddressService } from './address.service';
-import { CreateAddressDto } from './dto/create-address.dto';
-import { UpdateAddressDto } from './dto/update-address.dto';
+
 import { AuthGuard } from 'utils/guards/auth.guard';
 import { RolesGuard } from 'utils/guards/roles.guard';
 import { User } from 'src/users/entities/user.entity';
 import { CurrentUser } from 'utils/decorators/current-user.decorator';
+import { AddressService } from '../address.service';
+import { CreateAddressDto } from '../dto/create-address.dto';
+import { UpdateAddressDto } from '../dto/update-address.dto';
 
 @UseGuards(AuthGuard, RolesGuard)
 @Controller('addresses')
